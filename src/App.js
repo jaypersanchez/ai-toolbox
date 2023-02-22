@@ -10,12 +10,7 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
-  const [chatgptkey, setChatGptKey] = useState("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")
   
-  useEffect(() => {
-    //console.log(`ChatGpt Key ${chatgptkey}`)
-  })
-
   return (
     <div className="App">
       <header className="App-header">
