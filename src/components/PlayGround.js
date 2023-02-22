@@ -16,22 +16,8 @@ const PlayGround = () => {
     const [gptmodel, setGptModel] = useState('text-davinci-003')
     const [chatgpturl, setChatGptUrl] = useState(`https://api.openai.com/v1/engines/${gptmodel}/completions`)
     const [temperature, setTemperature] = useState(1)
-    const {
-        transcript,
-        listening,
-        resetTranscript,
-        browserSupportsSpeechRecognition
-    } = useSpeechRecognition();
     
-    useEffect(() => {
-        if(!browserSupportsSpeechRecognition) {
-            console.log(`Browser does not support speech recognition`)
-        }
-        setUserPrompt(transcript)
-        console.log(`${transcript}`)
-
-    })
-
+    
     const handlePrompt = async() => {
         
         let response = await fetch(chatgpturl, {
@@ -71,13 +57,6 @@ const PlayGround = () => {
                     maxRows={50}
                     style={{ width: 1000 }}
                 />
-                <div>
-                    <p>Microphone: {listening ? 'on' : 'off'}</p>
-                    <button onClick={SpeechRecognition.startListening}>Start</button>
-                    <button onClick={SpeechRecognition.stopListening}>Stop</button>
-                    <button onClick={resetTranscript}>Reset</button>
-                    <p>{transcript}</p>
-                </div>
             </div>
         </>
     );
