@@ -16,6 +16,33 @@ const TopBar = () => {
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
     
+    const loadWeb3 = async() => {
+        if(window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            window.ethereum.enable();
+        }
+        else if(window.web3) {
+            window.web3 = new Web3(window.web3.currentProvider);
+        }
+        else {
+            window.alert("Please install metamask")
+        }
+    }
+
+    const loadWalletData = async() => {
+        const web3 = window.web3;
+        const account = await web3.eth.getAccounts();
+        setCurrentAccount(account[0]);
+        let _balance = await web3.eth.getBalance(currentAccount);
+        let balance = await web3.utils.fromWei(_balance, "ether")
+        setAccountBalance(balance);
+    }
+
+    useEffect(() => {
+        loadWeb3();
+        loadWalletData();
+    })
+
     return(
         <>
             <div className='App.header'>
