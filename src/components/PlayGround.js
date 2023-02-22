@@ -5,6 +5,7 @@ import axios from 'axios'
 import '../App.css'
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import ReactTypingEffect from 'react-typing-effect';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 const PlayGround = () => {
 
@@ -15,11 +16,24 @@ const PlayGround = () => {
     const [gptmodel, setGptModel] = useState('text-davinci-003')
     const [chatgpturl, setChatGptUrl] = useState(`https://api.openai.com/v1/engines/${gptmodel}/completions`)
     const [temperature, setTemperature] = useState(1)
-    const [processing, setProcessing] = useState(false)
-        
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+    
+    useEffect(() => {
+        if(!browserSupportsSpeechRecognition) {
+            console.log(`Browser does not support speech recognition`)
+        }
+        setUserPrompt(transcript)
+        console.log(`${transcript}`)
+
+    })
+
     const handlePrompt = async() => {
-        setProcessing(true)
-        console.log(`${userPrompt}::${maxTokens}::${temperature}`)
+        
         let response = await fetch(chatgpturl, {
             method: `POST`,
             headers: {
@@ -34,10 +48,8 @@ const PlayGround = () => {
         })
         const data = await response.json();
         if (data && data.choices && data.choices[0] && data.choices[0].text) {
-            console.log(data.choices[0].text)
             setResponse(data.choices[0].text)
         }
-        setProcessing(false)
     }
 
     return(
@@ -45,20 +57,27 @@ const PlayGround = () => {
             <div className='App.header'>ChatGpt Playground</div>
             <div>
                 <Form.Group className='mb-3' id="prompt">
-                    <Form.Control placeholder='Ask Your Question' onChange={(e) => {setUserPrompt(e.target.value)}}/>
+                    <Form.Control placeholder='Ask Your Question' onChange={(e) => {setUserPrompt(e.target.value)}} value={userPrompt}/>
                 </Form.Group>
             </div>
             <div>
                 <Button variant="primary" onClick={(e) => handlePrompt(e)}>Submit</Button>
             </div>
             <div>
-            <TextareaAutosize
-                aria-label="minimum height"
-                value={response}
-                minRows={20}
-                maxRows={50}
-                style={{ width: 1500 }}
-            />
+                <TextareaAutosize
+                    aria-label="minimum height"
+                    value={response}
+                    minRows={20}
+                    maxRows={50}
+                    style={{ width: 1000 }}
+                />
+                <div>
+                    <p>Microphone: {listening ? 'on' : 'off'}</p>
+                    <button onClick={SpeechRecognition.startListening}>Start</button>
+                    <button onClick={SpeechRecognition.stopListening}>Stop</button>
+                    <button onClick={resetTranscript}>Reset</button>
+                    <p>{transcript}</p>
+                </div>
             </div>
         </>
     );
