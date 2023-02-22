@@ -28,9 +28,9 @@ const TopBar = () => {
             </div>
             <div>
                     <p>Microphone: {listening ? 'on' : 'off'}</p>
-                    <Button variant="secondary" onClick={SpeechRecognition.startListening}>Start</Button>
-                    <Button variant="secondary" onClick={SpeechRecognition.stopListening}>Stop</Button>
-                    <Button variant="secondary" onClick={resetTranscript}>Reset</Button>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={SpeechRecognition.startListening}>Start</Button>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={SpeechRecognition.stopListening}>Stop</Button>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={resetTranscript}>Reset</Button>
             </div>
         </>
     )

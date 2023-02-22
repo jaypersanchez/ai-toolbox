@@ -59,9 +59,9 @@ const PlayGround = () => {
                 </Form.Group>
             </div>
             <div>
-                <Button variant="primary" onClick={(e) => handlePrompt(e)}>Submit</Button>
+                <Button variant="primary" onClick={(e) => handlePrompt(e)}>Send Instructions</Button>
             </div>
-            <div>
+            <div class="mt-2 col-md-12">
                 <TextareaAutosize
                     aria-label="minimum height"
                     value={response}
