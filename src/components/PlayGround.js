@@ -11,15 +11,16 @@ const PlayGround = () => {
 
     const [userPrompt, setUserPrompt] = useState();
     const [response, setResponse] = useState();
+    const [contentdata, setContentData] = useState()
     const [maxTokens, setMaxTokens] = useState(500)
     const [chatgptkey, setChatGptKey] = useState(process.env.REACT_APP_CHATGPT_KEY)
     const [gptmodel, setGptModel] = useState('text-davinci-003')
     const [chatgpturl, setChatGptUrl] = useState(`https://api.openai.com/v1/engines/${gptmodel}/completions`)
     const [temperature, setTemperature] = useState(1)
     
-    
     const handlePrompt = async() => {
-        
+        setUserPrompt(`${userPrompt}\n\n${contentdata}`)
+                
         let response = await fetch(chatgpturl, {
             method: `POST`,
             headers: {
@@ -49,17 +50,30 @@ const PlayGround = () => {
             <div>
                 <Button variant="primary" onClick={(e) => handlePrompt(e)}>Submit</Button>
             </div>
-            <div>
+            <div style={{ 'display': 'flex', 'flex-direction': 'row','justify-content': 'flex-start' }}>
+                <TextareaAutosize
+                    aria-label="minimum height"
+                    value={contentdata}
+                    minRows={20}
+                    maxRows={50}
+                    style={{ width: 1000 }}
+                    placeholder='Provide Content'
+                    onChange={(e) => setContentData(e.target.value)}
+                />
+            
+            
                 <TextareaAutosize
                     aria-label="minimum height"
                     value={response}
                     minRows={20}
                     maxRows={50}
                     style={{ width: 1000 }}
+                    placeholder='Result'
                 />
             </div>
         </>
     );
 }
+
 
 export default PlayGround;
