@@ -18,8 +18,12 @@ const PlayGround = () => {
     const [chatgpturl, setChatGptUrl] = useState(`https://api.openai.com/v1/engines/${gptmodel}/completions`)
     const [temperature, setTemperature] = useState(1)
     
+    useMemo(() => {
+
+    },[userPrompt])
+
     const handlePrompt = async() => {
-        setUserPrompt(`${userPrompt}\n\n${contentdata}`)
+        //let _userPrompt = `${userPrompt}\n\n${contentdata}`
                 
         let response = await fetch(chatgpturl, {
             method: `POST`,
@@ -28,7 +32,7 @@ const PlayGround = () => {
                 'Authorization': `Bearer ${chatgptkey}`
             },
             body: JSON.stringify({
-                prompt: userPrompt,
+                prompt: `${userPrompt}\n\n${contentdata}`,
                 temperature: temperature,
                 max_tokens: maxTokens
             })
