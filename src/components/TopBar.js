@@ -2,11 +2,21 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Button, Tabs, Tab, Container, Nav, Navbar, Form, Modal } from 'react-bootstrap'
 import Web3 from 'web3';
 import '../App.css'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+
 
 const TopBar = () => {
 
     const [currentAccount, setCurrentAccount] = useState("")
     const [accountBalance, setAccountBalance] = useState("")
+
+    const {
+        transcript,
+        listening,
+        resetTranscript,
+        browserSupportsSpeechRecognition
+    } = useSpeechRecognition();
+    
 
     const loadWeb3 = async() => {
         if(window.ethereum) {
@@ -26,6 +36,7 @@ const TopBar = () => {
         loadWalletData();
     })
 
+
     const loadWalletData = async() => {
         const web3 = window.web3;
         const account = await web3.eth.getAccounts();
@@ -34,6 +45,11 @@ const TopBar = () => {
         let balance = await web3.utils.fromWei(_balance, "ether")
         setAccountBalance(balance);
     }
+
+    useEffect(() => {
+        loadWeb3();
+        loadWalletData();
+    })
 
     return(
         <>
@@ -44,6 +60,12 @@ const TopBar = () => {
                         <Navbar.Brand>Wallet ETH Balance: {accountBalance}</Navbar.Brand>
                     </Container>
                 </Navbar>
+            </div>
+            <div>
+                    <p>Microphone: {listening ? 'on' : 'off'}</p>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={SpeechRecognition.startListening}>Start</Button>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={SpeechRecognition.stopListening}>Stop</Button>
+                    <Button variant="secondary" class="btn btn-outline-primary mr-1" onClick={resetTranscript}>Reset</Button>
             </div>
         </>
     )

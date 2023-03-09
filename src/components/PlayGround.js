@@ -18,6 +18,13 @@ const PlayGround = () => {
     const [chatgpturl, setChatGptUrl] = useState(`https://api.openai.com/v1/engines/${gptmodel}/completions`)
     const [temperature, setTemperature] = useState(1)
     
+
+    useEffect(() => {
+        if(!browserSupportsSpeechRecognition) {
+            console.log(`Browser does not support speech recognition`)
+        }
+        setUserPrompt(transcript)
+    })
     useMemo(() => {
 
     },[userPrompt])
@@ -52,8 +59,9 @@ const PlayGround = () => {
                 </Form.Group>
             </div>
             <div>
-                <Button variant="primary" onClick={(e) => handlePrompt(e)}>Submit</Button>
+                <Button variant="primary" onClick={(e) => handlePrompt(e)}>Send Instructions</Button>
             </div>
+
             <div style={{ 'display': 'flex', 'flex-direction': 'row','justify-content': 'flex-start' }}>
                 <TextareaAutosize
                     aria-label="minimum height"
@@ -66,6 +74,7 @@ const PlayGround = () => {
                 />
             
             
+
                 <TextareaAutosize
                     aria-label="minimum height"
                     value={response}
