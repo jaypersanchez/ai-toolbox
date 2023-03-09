@@ -9,6 +9,7 @@ const TopBar = () => {
 
     const [currentAccount, setCurrentAccount] = useState("")
     const [accountBalance, setAccountBalance] = useState("")
+
     const {
         transcript,
         listening,
@@ -16,6 +17,7 @@ const TopBar = () => {
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
     
+
     const loadWeb3 = async() => {
         if(window.ethereum) {
             window.web3 = new Web3(window.ethereum);
@@ -28,6 +30,12 @@ const TopBar = () => {
             window.alert("Please install metamask")
         }
     }
+
+    useEffect(() => {
+        loadWeb3();
+        loadWalletData();
+    })
+
 
     const loadWalletData = async() => {
         const web3 = window.web3;
