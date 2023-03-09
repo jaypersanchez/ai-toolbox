@@ -24,9 +24,9 @@ const TopBar = () => {
         else if(window.web3) {
             window.web3 = new Web3(window.web3.currentProvider);
         }
-        else {
+        /*else {
             window.alert("Please install metamask")
-        }
+        }*/
     }
 
     const loadWalletData = async() => {
