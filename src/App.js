@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 import TopBar from './components/TopBar';
 import PlayGround from './components/PlayGround'
-import AudioControl from './components/AudioControl'
+import DataModelTraining from './components/DataModelTraining'
 import { useState, useEffect } from 'react';
 
 function App() {
@@ -25,8 +25,8 @@ function App() {
           <Tab eventKey="PlayGround" title="Playground">
                 <PlayGround />
           </Tab>
-          <Tab eventKey="AudioControl" title="AudioControl">
-              <AudioControl />
+          <Tab eventKey="DataModelTraining" title="Data Model Training">
+              <DataModelTraining />
           </Tab>
        </Tabs>
       </div>

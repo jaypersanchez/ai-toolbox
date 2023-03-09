@@ -3,14 +3,14 @@ import { Button, Tabs, Tab, Container, Nav, Navbar, Form, Modal } from 'react-bo
 import Web3 from 'web3';
 import '../App.css'
 
-const AudioControl = () => {
+const DataModelTraining = () => {
 
     return(
         <>
-        <div className='App.header'>Whisper Audio Control</div>
+        <div className='App.header'>Data Model Training</div>
         </>
     );
 
 }
 
-export default AudioControl;
+export default DataModelTraining;

@@ -71,7 +71,7 @@ const PlayGround = () => {
                     minRows={20}
                     maxRows={50}
                     style={{ width: 1000 }}
-                    placeholder='Provide Content'
+                    placeholder='Provide Content - Manual Entry'
                     onChange={(e) => setContentData(e.target.value)}
                 />
             
