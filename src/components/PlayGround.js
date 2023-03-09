@@ -4,6 +4,9 @@ import Web3 from 'web3';
 import axios from 'axios'
 import '../App.css'
 import TextareaAutosize from '@mui/base/TextareaAutosize';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import { green } from '@mui/material/colors';
 import ReactTypingEffect from 'react-typing-effect';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
@@ -23,6 +26,10 @@ const PlayGround = () => {
         resetTranscript,
         browserSupportsSpeechRecognition
     } = useSpeechRecognition();
+    //circular progress state
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
     
     useEffect(() => {
         if(!browserSupportsSpeechRecognition) {
@@ -31,10 +38,24 @@ const PlayGround = () => {
         setUserPrompt(transcript)
     },[transcript, browserSupportsSpeechRecognition])
 
-    
+    //for timeouts
+    useEffect(() => {
+        return () => {
+          clearTimeout(timer.current);
+        };
+    }, []);
 
     const handlePrompt = async() => {
-        console.log(`${userPrompt}\n\n${contentdata}`)
+        setLoading(true);
+        //console.log(`${userPrompt}\n\n${contentdata}`)
+        if (!loading) {
+            setSuccess(false);
+            setLoading(true);
+            timer.current = window.setTimeout(() => {
+              setSuccess(true);
+              setLoading(false);
+            }, 200000);
+        }
         let response = await fetch(chatgpturl, {
             method: `POST`,
             headers: {
@@ -50,6 +71,8 @@ const PlayGround = () => {
         const data = await response.json();
         if (data && data.choices && data.choices[0] && data.choices[0].text) {
             setResponse(data.choices[0].text)
+            setSuccess(true);
+            setLoading(false);
         }
     }
 
@@ -63,6 +86,21 @@ const PlayGround = () => {
             </div>
             <div>
                 <Button variant="primary" onClick={(e) => handlePrompt(e)}>Send Instructions</Button>
+                <Box sx={{ m: 1, position: 'relative' }}>
+                    {loading && (
+                <CircularProgress
+                    size={24}
+                    sx={{
+                    color: green[500],
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    marginTop: '-12px',
+                    marginLeft: '-12px',
+                    }}
+                />
+                )}
+            </Box>
             </div>
             <div style={{ 'display': 'flex', 'flex-direction': 'row','justify-content': 'flex-start' }}>
                 <TextareaAutosize
@@ -85,6 +123,7 @@ const PlayGround = () => {
                     placeholder='Result'
                 />
             </div>
+            
         </>
     );
 }
